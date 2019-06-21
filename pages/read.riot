@@ -1,0 +1,59 @@
+<read>
+      <div class="page-wrapper">
+        <!-- ******Header****** -->
+        <header id="header" class="header">
+            <div class="container">
+                <div class="branding">
+                    <h1 class="logo">
+                        <a href="/">
+                           <img src="/assets/media/logo.svg" />
+                        </a>
+                    </h1>
+                </div><!--//branding-->
+                <breadcrumb items={state.items}/>
+                <div class="top-search-box">
+                    <search-box />
+                </div>
+            </div><!--//container-->
+        </header><!--//header-->
+        <div class="doc-wrapper">
+            <div class="container">
+                <div class="doc-body row">
+                    <div class="doc-content col-md-9 col-12 order-1">
+                      <showdown src={'/docs/'+state.doc}/>
+                    </div>
+                     <div class="doc-sidebar col-md-3 col-12 order-0 d-none d-md-flex">
+                        <div id="doc-nav" class="doc-nav">
+                          <showdown-nav class="nav doc-menu flex-column sticky" from="#markdown"></showdown-nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  <script>
+    import Showdown from 'components/ui/showdown.riot'
+    import ShowdownNav from 'components/ui/showdown-nav.riot'
+    import SearchBox from 'components/ui/search-box.riot'
+    import Breadcrumb from 'components/ui/breadcrumb.riot'
+
+    export default () => ({
+      components: {
+        Showdown,
+        Breadcrumb,
+        [SearchBox.name]: SearchBox,
+        [ShowdownNav.name]: ShowdownNav
+      },
+      state: {
+        doc: null,
+        links: [{}],
+      },
+      async fetch(props){
+        const {args} = this.req.params;
+        this.update({
+          doc: args && args[0] || 'readme.md',
+        })
+      }
+    })
+  </script>
+</read>

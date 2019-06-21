@@ -1,0 +1,123 @@
+<search-box>
+   <div class="form-inline search-form justify-content-center {classes.form}">
+      <i class="spinner-border {state.loading ? '' : classes.hidden} {classes.spinner}" role="status">
+           <span class="sr-only">Loading...</span>
+      </i>
+      <input type="text" 
+        onfocus={onFocus} 
+        onblur={onBlur}
+        onkeyup={(ev) => {
+          if (!state.loading) animate(ev); 
+          search(ev);
+        }}
+        placeholder="Search docs..." 
+        name="search" 
+        class="form-control search-input {classes.input}" 
+        autocomplete="off"
+        />     
+      <button type="submit" class="btn search-btn">
+        <i class="fas fa-search"></i>
+      </button>
+   </div>
+   <div class="{state.focused ? classes.suggestions : classes.hidden} {state.loading && 'loading'}" id="results" onclick={onClick}>
+      <div class="{classes.results} {classes.notFound}" if={state.value && !state.results.length}>
+        nothing found :(
+      </div>
+      <div class={classes.results} if={state.results.length}>
+        <a href={'/read@' + getPath(item.path)} class={classes.result} each={item in state.results}>
+          <h5> {state.results.indexOf(item) + 1}. {item.title}</h5>
+          <p> {getHighlight(item.body)} </p>
+        </a>
+      </div>
+   </div>
+  <script>
+    
+    import styles from './search-box.jss'
+    import withJss from 'riot-jss'
+    import {debounce} from 'lodash'
+
+    const SearchBox = {
+      styles,
+      name: 'search-box',
+      state: {
+        value: '',
+        focused: false,
+        results: [],
+        loading: false
+      },
+
+      search: debounce(function(ev){
+        const {value} = ev.target;
+        this.update({loading: true})
+        this.client.service('search').find({query:{value,}}).then((results)=>{
+          this.update({
+            results,
+            value: value.toLowerCase(),
+          })
+          setTimeout(()=>{
+            this.update({loading: false})
+          },400)
+        })
+      },300),
+
+      onMounted(){
+        const walk = (el) => {
+          if (!el) {
+            return this.update({focused: false})
+          }
+          if (el.tagName && el.tagName.toLowerCase() === 'search-box') {
+            return;
+          }
+          else {
+            walk(el.parentNode)
+          }
+        }
+        document.body.addEventListener('click', (ev)=>{
+          walk(ev.target)
+        })
+      },
+
+      getHighlight(body){
+        const data = body.toLowerCase()
+        return '...' + body.substr( data.indexOf(this.state.value) , 160 ) + '...'
+      },
+
+      getPath(path){
+        return path.replace(/^docs\//, '')
+      },
+
+      onSubmit(ev){
+        ev.preventDefault()
+      },
+
+      onClick(ev){
+        this.update({ focused: false })
+      },
+
+      onFocus(ev){
+        this.setWidth();
+        this.update({ focused: true })
+      },
+
+      onBlur(ev){
+        //this.update({ focused: false })
+      },
+
+      setWidth(){
+        const width = this.$('input').getBoundingClientRect().width + 10;
+        this.$('#results').style.width = width;
+      },
+
+      animate(ev){
+        ev.stopPropagation()
+        this.update({
+          loading: true
+        })
+      }
+
+
+    };
+
+    export default () => withJss(SearchBox);
+  </script>
+</search-box>

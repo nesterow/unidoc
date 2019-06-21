@@ -1,0 +1,64 @@
+<showdown>
+  <section id='markdown'></section>
+  <section if={state.notFound}>
+    <h1>Not Found</h1>
+  </section>
+  <script>
+    
+    import axios from 'axios'
+    import showdown from 'showdown'
+    import showdownTable from 'showdown-table'
+    showdown.extensions.table = showdownTable
+    
+    const NOT_FOUND = 0x241f3
+    const isClient = typeof window !== 'undefined'
+    
+    
+    
+
+    export default () => ({
+      state: {
+        notFound: false,
+        markdown: '',
+      },
+
+      async fetch(){
+        
+        const url = isClient ? this.props.src : process.env.ORIGIN + this.props.src;
+        let markdown = decodeURIComponent(this.state.markdown);
+
+        if (!markdown) {
+          const {data, status} = await axios.get(url).catch((err) => {
+            return {
+              data: NOT_FOUND 
+            }
+          })
+
+          if (data === NOT_FOUND) {
+            this.update({
+              notFound: true,
+            })
+            return Promise.resolve(NOT_FOUND)
+          }
+
+          const converter = new showdown.Converter({extensions: ['table']})
+          markdown  = converter.makeHtml(data)
+        }
+        this.$('#markdown').innerHTML = markdown
+        this.update({
+          markdown: encodeURIComponent(markdown),
+        })
+        if (this.props.onRender) {
+          this.props.onRender(this)
+        }
+      },
+
+      async onMounted() {
+        if (isClient) {
+          await this.fetch()
+        }
+      },
+      
+    })
+  </script>
+</showdown>
