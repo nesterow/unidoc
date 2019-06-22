@@ -1,8 +1,8 @@
 {
-  "name": "frontless",
-  "version": "0.5.6-alpha.1",
+  "name": "unidoc",
+  "version": "0.0.1",
   "main": "index.js",
-  "repository": "git@github.com:nesterow/frontless.git",
+  "repository": "git@github.com:nesterow/unidoc.git",
   "author": "Anton Nesterov <arch.nesterov@gmail.com>",
   "license": "MIT",
   "scripts": {
@@ -34,9 +34,10 @@
     "eventbusjs": "^0.2.0",
     "express": "^4.16.4",
     "express-session": "^1.16.1",
-    "feathers-mongodb": "^4.0.4",
     "gulp": "^4.0.1",
     "gulp-showdown": "^0.1.0",
+    "jsdom": "15.1.1",
+    "jsdom-global": "3.0.2",
     "lodash": "^4.17.11",
     "mongodb": "^3.2.3",
     "qs": "^6.7.0",
@@ -44,15 +45,14 @@
     "require-globify": "^1.4.1",
     "riot": "^4.1.1",
     "riot-jss": "^1.0.5",
+    "riot-state": "^1.0.3",
     "showdown": "^1.9.0",
     "showdown-table": "^1.0.1",
     "socket.io-client": "^2.2.0",
     "turbolinks": "^5.2.0",
     "validate.js": "^0.12.0",
     "validator": "^11.0.0",
-    "xss": "^1.0.6",
-    "jsdom": "15.1.1",
-    "jsdom-global": "3.0.2"
+    "xss": "^1.0.6"
   },
   "devDependencies": {
     "browserify": "^16.2.3",

@@ -14,7 +14,7 @@
     const isClient = typeof window !== 'undefined'
     
     
-    
+    import showdownStore from './showdown.store'
 
     export default () => ({
       state: {
@@ -23,7 +23,7 @@
       },
 
       async fetch(){
-        
+        showdownStore.reset()
         const url = isClient ? this.props.src : process.env.ORIGIN + this.props.src;
         let markdown = decodeURIComponent(this.state.markdown);
 
@@ -51,6 +51,7 @@
         if (this.props.onRender) {
           this.props.onRender(this)
         }
+        showdownStore.dispatch('getItems', this.$('#markdown'))
       },
 
       async onMounted() {

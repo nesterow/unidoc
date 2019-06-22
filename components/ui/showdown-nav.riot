@@ -1,39 +1,21 @@
 <showdown-nav>
   
-  <a class="nav-link scrollto" each={item in state.items} href={'#' + item.id}>
+  <a class="nav-link scrollto" each={item in navItems} href={'#' + item.id}>
     <i if={item.icon} class={item.icon}></i>
     <img if={item.img} src={item.src} />
     {item.content}
   </a>
 
   <script>
+    import showdownStore from './showdown.store'
     export default () => ({
       name: 'showdown-nav',
-      state: {
-        items:[],
+      shared: [
+        'navItems'
+      ],
+      onMounted(){
+        showdownStore.install(this)
       },
-      onRendered(){
-        this.draw()
-      },
-      draw(){
-        const {from} = this.props;
-        const headers = Array.from(document.querySelectorAll(`${from} h1, ${from} h2, ${from} h3, ${from} h4`));
-        this.update({
-          items: headers.map((e, i) => {
-            
-            if (i == 0) this.setTitle(e.innerText)
-            const fallback = document.createElement('div')
-            const icon = (e.querySelector('i') || fallback).getAttribute('class')
-            const img = (e.querySelector('img') || fallback).getAttribute('src')
-            return {
-              id: e.getAttribute('id'),
-              content: e.innerText,
-              icon,
-              img,
-            }
-          })
-        })
-      }
     })
   </script> 
 </showdown-nav>
