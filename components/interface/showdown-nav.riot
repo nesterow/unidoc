@@ -1,20 +1,18 @@
 <showdown-nav>
   
-  <a class="nav-link scrollto" each={item in navItems} href={'#' + item.id}>
+  <a class="nav-link scrollto" each={item in $state.navItems} href={'#' + item.id}>
     <i if={item.icon} class={item.icon}></i>
     <img if={item.img} src={item.src} />
     {item.content}
   </a>
 
   <script>
-    import showdownStore from './showdown.store'
     export default () => ({
       name: 'showdown-nav',
-      shared: [
-        'navItems'
+      observe: [
+        'navItems',
       ],
       onMounted(){
-        showdownStore.install(this)
       },
     })
   </script> 

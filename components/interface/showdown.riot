@@ -14,8 +14,6 @@
     const isClient = typeof window !== 'undefined'
     
     
-    import showdownStore from './showdown.store'
-
     export default () => ({
       state: {
         notFound: false,
@@ -23,35 +21,40 @@
       },
 
       async fetch(){
-        showdownStore.reset()
-        const url = isClient ? this.props.src : process.env.ORIGIN + this.props.src;
-        let markdown = decodeURIComponent(this.state.markdown);
 
+        const url = isClient ? this.props.src : `http://localhost:${process.env.PORT}` + this.props.src;
+        let markdown = decodeURIComponent(this.state.markdown);
+        
         if (!markdown) {
+          
           const {data, status} = await axios.get(url).catch((err) => {
             return {
               data: NOT_FOUND 
             }
-          })
-
+          });
+          
           if (data === NOT_FOUND) {
             this.update({
               notFound: true,
             })
-            return Promise.resolve(NOT_FOUND)
+            return Promise.resolve(NOT_FOUND);
           }
-
-          const converter = new showdown.Converter({extensions: ['table']})
-          markdown  = converter.makeHtml(data)
+          
+          const converter = new showdown.Converter({extensions: ['table'],});
+          markdown  = converter.makeHtml(data);
         }
-        this.$('#markdown').innerHTML = markdown
+        this.$('#markdown').innerHTML = markdown;
+
         this.update({
           markdown: encodeURIComponent(markdown),
         })
         if (this.props.onRender) {
           this.props.onRender(this)
         }
-        showdownStore.dispatch('getItems', this.$('#markdown'))
+        this.$store.dispatch({type: 'NAV', from: this.$('#markdown')})
+        
+        const title = this.$state.navItems[0] ? this.$state.navItems[0].content : ''
+        this.$store.dispatch({type: 'TITLE', title, })
       },
 
       async onMounted() {

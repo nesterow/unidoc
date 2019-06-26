@@ -2,20 +2,21 @@
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/">Home</a></li>
     <li class="breadcrumb-item active">
-        This
+        <a>{$state.title}</a>
     </li>
   </ol>
   <script>
-    export default () => ({
 
+    export default () => ({
+      observe: [
+        'title',
+      ],
       state: {
-        items: []
+        items: [],
       },
 
       onMounted(){
-        this.update({
-          items: this.props.items || []
-        })
+
       },
 
     })

@@ -34,7 +34,7 @@ import feathers from '@feathersjs/feathers'
 import session from 'express-session'
 import cors from 'cors'
 import socketio from '@feathersjs/socketio'
-import FrontlessMiddleware from './utils/middleware'
+import {Frontless} from '@frontless/core'
 import 'plugins'
 
 
@@ -84,8 +84,8 @@ app.configure(socketio({}, function(io) {
 
 const path = __dirname + '/..';
 app.emit('setup:ssr', app)
-app.use('/*@:args',  FrontlessMiddleware(path, ['styles']))
-app.use('/*',  FrontlessMiddleware(path, ['styles']))
+app.use('/*@:args',  Frontless(path, ['styles']))
+app.use('/*',  Frontless(path, ['styles']))
 
 app.setState = (id, data) => {
   return {
@@ -106,11 +106,12 @@ const ReadyPromise = new Promise((resolve, reject) => {
 })  
 
 const start = (mongo) => {
+  const {PORT} = process.env
   app.emit('connected', app, mongo)
   require('../services')(app, mongo)
   app.mongo = mongo;
-  let server = app.listen(6767, (err) => {
-    console.log(`👍  app is listening on ${6767} \r\n`)
+  let server = app.listen(PORT, (err) => {
+    console.log(`👍  app is listening on ${PORT} \r\n`)
     Resolve({app, mongo, server})
   }).
   on('error', (error) => {

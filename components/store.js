@@ -1,16 +1,20 @@
-const {createStore, getInitial} = require('riot-state')
+const {isBrowser} = require('@frontless/core')
+const store = require('@frontless/redux')
 
-
-const name = 'showdown'
-
-const state = getInitial(name) || {
-  navItems: []
-};
+const state = isBrowser && document.__GLOBAL_SHARED_STATE || {
+  title: '',
+  navItems: [],
+}
 
 const actions = {
-  getItems(from){
+
+  TITLE: function(state, {title}) {
+    state.title = title
+  },
+
+  NAV: function(state, {from}) {
     const headers = Array.from(from.querySelectorAll(`h1,h2,h3,h4`));
-    this.navItems = headers.map((e, i) => {
+    state.navItems = headers.map((e, i) => {
       const fallback = document.createElement('div')
       const icon = (e.querySelector('i') || fallback).getAttribute('class')
       const img = (e.querySelector('img') || fallback).getAttribute('src')
@@ -21,11 +25,13 @@ const actions = {
         img,
       }
     })
-  }
-};
+  },
 
-module.exports = createStore({
-  name,
+}
+
+
+
+module.exports = store({
   state,
-  actions
+  actions,
 })

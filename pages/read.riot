@@ -32,22 +32,33 @@
         </div>
     </div>
   <script>
-    import Showdown from 'components/ui/showdown.riot'
-    import ShowdownNav from 'components/ui/showdown-nav.riot'
-    import SearchBox from 'components/ui/search-box.riot'
-    import Breadcrumb from 'components/ui/breadcrumb.riot'
-
+    import Showdown from 'interface/showdown.riot'
+    import ShowdownNav from 'interface/showdown-nav.riot'
+    import SearchBox from 'interface/search-box.riot'
+    import Breadcrumb from 'interface/breadcrumb.riot'
+    
     export default () => ({
+      observe: ['title'],
+      title: '',
       components: {
         Showdown,
         Breadcrumb,
         [SearchBox.name]: SearchBox,
         [ShowdownNav.name]: ShowdownNav
       },
+      store: {
+        
+      },
       state: {
         doc: null,
         links: [{}],
       },
+      
+      onAction({title}){
+        this.title = title;
+        this.update()
+      },
+
       async fetch(props){
         const {args} = this.req.params;
         this.update({

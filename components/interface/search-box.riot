@@ -48,7 +48,7 @@
 
       search: debounce(function(ev){
         const {value} = ev.target;
-        this.update({loading: true})
+        this.update({loading: true});
         this.client.service('search').find({query:{value,}}).then((results)=>{
           this.update({
             results,
