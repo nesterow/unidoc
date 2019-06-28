@@ -26,7 +26,7 @@ $(document).ready(function() {
         e.preventDefault();
         $(this).ekkoLightbox();
     });
-
+    $('table').addClass('table table-bordered')
     setTimeout(function(){
         document.body.classList.remove('loading')
     },500);

@@ -9,7 +9,7 @@
                     <img src="/assets/media/logo.svg" />
                 </div><!--//branding-->
                 <div class="tagline">
-                    <p>FeathersJS + RiotJS + Turbolinks + Express</p>
+                    <p> {manifest.tagline} </p>
                 </div>
                 
 	             <div class="main-search-box d-inline-block">
@@ -20,13 +20,28 @@
         
         <section class="cards-section text-center">
             <div class="container">
-                <h2 class="title">Minimalistic Fullstack SSR Framework</h2>
+                <h2 class="title"> {manifest.headline} </h2>
                 <div class="intro">
-                    <p>Welcome to prettyDocs. This landing page is an example of how you can use a card view to present segments of your documentation. You can customise the icon fonts based on your needs.</p>
+                    <p>
+                        {manifest.intro}
+                    </p>
                     <div class="cta-container">
                         <!--  <a class="btn btn-primary btn-cta" href="https://themes.3rdwavemedia.com/bootstrap-templates/startup/prettydocs-free-bootstrap-theme-for-developers-and-startups/" target="_blank"><i class="fas fa-cloud-download-alt"></i> Download Now</a>  -->
                     </div><!--//cta-container-->
                 </div><!--//intro-->
+                <div id="cards-wrapper" each={block in manifest.cards} class="cards-wrapper row">
+                    <div each={item in block.items} class="item item-{item.color} col-lg-4 col-6">
+                        <div class="item-inner">
+                            <div class="icon-holder">
+                                <i class="icon fa {item.icon}"></i>
+                            </div><!--//icon-holder-->
+                            <h3 class="title">{item.title}</h3>
+                            <p class="intro">{item.text}</p>
+                            <a class="link" href={item.link}><span></span></a>
+                        </div><!--//item-inner-->
+                    </div><!--//item-->
+                </div>
+                
                 <div id="cards-wrapper" class="cards-wrapper row">
                     <div class="item item-green col-lg-4 col-6">
                         <div class="item-inner">
@@ -96,8 +111,12 @@
     
   <script>
     import SearchBox from 'interface/search-box.riot'
+    import manifest from 'manifest'
+
     export default () => ({
       layout: 'base',
+      title: manifest.title,
+      manifest,
       components: {
         [SearchBox.name]: SearchBox,
       },

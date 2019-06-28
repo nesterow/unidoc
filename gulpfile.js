@@ -1,7 +1,10 @@
 process.env.NODE_PATH = `${__dirname}:${__dirname}/components:${__dirname}/node_modules`
+
+
 const { spawn } = require('child_process');
 const gulp       = require('gulp')
 const browserify = require('browserify')
+const babelify    = require('babelify')
 const globify    = require('require-globify')
 const riotify    = require('riotify')
 const hmr        = require('browserify-hmr')
@@ -40,10 +43,10 @@ gulp.task('start', function (done) {
   gulp.task('scss')()
   return nodemon({
     script: 'index.js'
-  , tasks: ['worker', 'boot', 'scss']
+  , tasks: ['default', 'worker', 'boot', 'scss']
   , args: ['./config/environ.env']
   , ignore: ['node_modules/', 'assets/']
-  , ext: 'js ejs riot json jss scss env'
+  , ext: 'js ejs riot json jss scss env md'
   , env: { 'NODE_ENV': 'development' }
   , done: done
   })
@@ -52,9 +55,12 @@ gulp.task('start', function (done) {
 gulp.task('build', function(){
 
   return browserify({ entries: ['pages/index.js'] })
+    .transform(babelify.configure({
+      presets: ["@babel/preset-env"]
+    }))
     .transform(globify)
     .transform(riotify) // pass options if you need
-    .plugin('tinyify', { flat: false })
+    // .plugin('tinyify', { flat: false })
     .bundle()
     .pipe(require('minify-stream')({ sourceMap: false }))
     .pipe(source('application.js'))
@@ -63,6 +69,9 @@ gulp.task('build', function(){
 
 gulp.task('worker', function(){
   return browserify({ entries: ['components/webworker/index.js'] })
+    .transform(babelify.configure({
+      presets: ["@babel/preset-env"]
+    }))
     .bundle()
     .pipe(source('worker.js'))
     .pipe(gulp.dest('assets/'))
@@ -70,6 +79,9 @@ gulp.task('worker', function(){
 
 gulp.task('boot', function(){
   return browserify({ entries: ['components/webworker/boot.js'] })
+    .transform(babelify.configure({
+      presets: ["@babel/preset-env"]
+    }))
     .bundle()
     .pipe(source('boot.js'))
     .pipe(gulp.dest('assets/'))
@@ -79,13 +91,16 @@ gulp.task('default', function(){
   const b = browserify({ 
       entries: ['pages/index.js'],
       plugin: [
-        hmr, 
+        // hmr, 
         watchify
       ], // load hmr as plugin
       debug: true,
       cache: {},
       packageCache: {}
     })
+    .transform(babelify.configure({
+      presets: ["@babel/preset-env"]
+    }))
     .transform(globify)
     .transform(riotify) // pass options if you need
   

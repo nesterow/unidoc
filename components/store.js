@@ -1,6 +1,10 @@
 const {isBrowser} = require('@frontless/core')
 const store = require('@frontless/redux')
 
+if (isBrowser) {
+  document.__GLOBAL = {}
+}
+
 const state = isBrowser && document.__GLOBAL_SHARED_STATE || {
   title: '',
   navItems: [],

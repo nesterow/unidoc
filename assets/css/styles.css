@@ -1561,3 +1561,14 @@ header .container
 {
     height: 110px;
 }
+
+.doc-wrapper
+{
+    background: transparent;
+}
+
+.page-wrapper
+{font-size: 17px; 
+
+    background: #fff;
+}
