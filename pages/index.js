@@ -74,7 +74,11 @@ const initialize = () => {
 
 }
 window.initialize = initialize;
+document.addEventListener('turbolinks:before-visit', () => {
+  document.body.classList.add('loading')
+})
 document.addEventListener('turbolinks:load', () => {
+  
   const fromCache = !!document.body.getAttribute('from-cache')
   if (!fromCache) {
     initialize()

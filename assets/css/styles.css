@@ -1492,6 +1492,18 @@ select
     }
 }
 
+code
+{color: #e83e8c; border-radius: 6px; 
+    background: #f7f7f7;
+}
+
+code[class*='language-'],
+pre[class*='language-']
+{font-family: 'Courier New', Courier, monospace; font-size: 14px; 
+
+    color: #565f57; text-shadow: none;
+}
+
 code[class]
 {
     width: 100%;
@@ -1516,6 +1528,11 @@ code[class]
 .loading *
 {
     pointer-events: none;
+}
+
+.loading img
+{
+    -webkit-filter: blur(2px);            filter: blur(2px);
 }
 
 .loading .btn
@@ -1568,7 +1585,21 @@ header .container
 }
 
 .page-wrapper
-{font-size: 17px; 
+{
+    font-family: 'Exo 2'; font-size: 17px; background: #fff;
+}
 
-    background: #fff;
+.level-H4
+{
+    margin-left: 24px;
+}
+
+.cards-wrapper h5
+{
+    width: 100%; padding: 16; padding-bottom: 2px; text-align: left; text-transform: uppercase;
+}
+
+#markdown img
+{
+    width: 100%; border: 2px solid #ccc; border-radius: 6px;
 }

@@ -44,15 +44,10 @@
           markdown  = converter.makeHtml(data);
         }
         this.$('#markdown').innerHTML = markdown;
-
         this.update({
           markdown: encodeURIComponent(markdown),
         })
-        if (this.props.onRender) {
-          this.props.onRender(this)
-        }
         this.$store.dispatch({type: 'NAV', from: this.$('#markdown')})
-        
         const title = this.$state.navItems[0] ? this.$state.navItems[0].content : ''
         this.$store.dispatch({type: 'TITLE', title, })
       },

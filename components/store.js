@@ -27,6 +27,7 @@ const actions = {
         content: e.textContent,
         icon,
         img,
+        from: 'level-' + e.tagName
       }
     })
   },
@@ -38,4 +39,7 @@ const actions = {
 module.exports = store({
   state,
   actions,
+}, 
+function() {
+  return isBrowser ? document : require('@frontless/core/src/mutex').release();
 })

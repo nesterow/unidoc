@@ -36,10 +36,11 @@
     import ShowdownNav from 'interface/showdown-nav.riot'
     import SearchBox from 'interface/search-box.riot'
     import Breadcrumb from 'interface/breadcrumb.riot'
-    
+    import manifest from 'manifest'
     export default () => ({
       observe: ['title'],
       title: '',
+      manifest,
       components: {
         Showdown,
         Breadcrumb,
@@ -55,7 +56,7 @@
       },
       
       onAction({title}){
-        this.title = title;
+        this.title = this.manifest.name + ' - ' + title;
         this.update()
       },
 

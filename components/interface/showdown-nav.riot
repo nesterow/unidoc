@@ -1,6 +1,6 @@
 <showdown-nav>
   
-  <a class="nav-link scrollto" each={item in $state.navItems} href={'#' + item.id}>
+  <a class="nav-link scrollto {item.from}" each={item in state.navItems} href={'#' + item.id} onclick={activate}>
     <i if={item.icon} class={item.icon}></i>
     <img if={item.img} src={item.src} />
     {item.content}
@@ -9,11 +9,19 @@
   <script>
     export default () => ({
       name: 'showdown-nav',
-      observe: [
-        'navItems',
-      ],
-      onMounted(){
+      observe: [ 'navItems' ],
+      state: {
+        navItems: []
       },
+      activate(ev) {
+        this.$$('a').map((el) => {
+          el.classList.remove('active')
+        })
+        ev.target.closest('a').classList.add('active')
+      },
+      onAction({navItems}){
+        this.update({navItems,})
+      }
     })
   </script> 
 </showdown-nav>

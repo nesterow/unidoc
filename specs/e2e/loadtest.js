@@ -1,6 +1,6 @@
 
 const loadtest = require('loadtest');
-const app = require('index')
+const app = require('index').default
 
 let LAST_LATENCY;
 function statusCallback(error, result, latency) {
@@ -11,7 +11,7 @@ function statusCallback(error, result, latency) {
 }
  
 const baseOptions = {
-    maxRequests: 1000,
+    maxRequests: 100,
     requestsPerSecond: 100,
     statusCallback: statusCallback,
     timeout: 5000,
@@ -28,14 +28,14 @@ describe("Loadtest", function() {
     after(async () => {
         app.then(({server, mongo}) => {
             server.close()
-            mongo.close()
+            // mongo.close()
         })
     })
 
 
-    it('perform a load test on `/playground/form`', async () => {
+    it('perform a load test on `/`', async () => {
         return new Promise((resolve, reject) => {
-            loadtest.loadTest({url: 'http://localhost:6767/playground/form', ...baseOptions}, function(error) {
+            loadtest.loadTest({url: 'http://localhost:6767/', ...baseOptions}, function(error) {
                 if (error) {
                     reject(error)
                 }

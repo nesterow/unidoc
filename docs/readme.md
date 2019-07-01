@@ -7,6 +7,10 @@ At the core Frontless is just a tiny [Express](https://expressjs.com/) server wh
 
 Frontless is built around best javascript technologies: [Feathers](https://feathersjs.com), [Riot.JS](https://riot.js.org), [Turbolinks](https://github.com/turbolinks/turbolinks), and [Express](https://expressjs.com/).
 
+## Why Frontless?
+It is good for everything! You can make sites, blogs, dashboards and pwa applications with Frontless.
+Frontless plays well with stock templates, any UI components and css frameworks like Bootstrap 4.  
+
 
 ## Goals
 
@@ -49,12 +53,12 @@ export default {
 
 | SERVER        | CLIENT        |
 | :------------- |:-------------|
-| Routing *[express.js]* | Navigation *[turbolinks]* |
-| View Model *[feathers]*    | Data Representation *[riot.js]* |
-| Layout Rendering *[riot/ssr]* | User input *[riot.js]*  |
-| Sessions *[express.js]* | JWT, Cookies |
-| Realtime *[feathers, socket.io]* | FeathersJS Client |
-| DB Interface *[@feathers/client]* | Rest/IO *[@feathers/client]* |
+| Routing - *express.js* | Navigation - *turbolinks* |
+| View Model - *feathers*    | Data Representation - *riot.js* |
+| Layout Rendering - *riot/ssr* | User input - *riot.js*  |
+| Sessions - *express.js* | *JWT, Cookies* |
+| Realtime - *feathers, socket.io]* | *@feathers/client* |
+| DB Interface - *@feathers/client* | Rest/IO - *@feathers/client* |
 
 ----------------
 ## License
@@ -64,10 +68,11 @@ This project is licensed under the MIT License - see the [LICENSE.md](https://gi
 -----------------
 ## Authors
 
-* **Anton Nesterov** - [@nesterow](https://github.com/nesterow)
+**Anton Nesterov** - [@nesterow](https://github.com/nesterow)
 
 -----------------
 ## Credits
-* **Gianluca Guarini** - [@GianlucaGuarini](https://github.com/GianlucaGuarini) - *[riot/hydrate](https://github.com/riot/hydrate)*, *[Riot.js](https://github.com/riot/riot)*
-* **Feathers.JS Community** - [Github](https://github.com/feathersjs/feathers/graphs/contributors)
+**Gianluca Guarini** - [@GianlucaGuarini](https://github.com/GianlucaGuarini) - *[riot/hydrate](https://github.com/riot/hydrate)*, *[Riot.js](https://github.com/riot/riot)*
+
+**Feathers.JS Community** - [Github](https://github.com/feathersjs/feathers/graphs/contributors)
 

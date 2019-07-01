@@ -1,8 +1,21 @@
 @import 'assets/scss/styles.scss';
 
+code {
+  background: #f7f7f7;
+  border-radius: 6px;
+  color: #e83e8c;
+}
+code[class*="language-"], 
+pre[class*="language-"] {
+  color: #565f57;
+  font-family: 'Courier New', Courier, monospace;
+  text-shadow: none;
+  font-size: 14px;
+}
 code[class]{
   width: 100%;
 }
+
 .top-search-box {
   min-width: 400px;
   .search-form .search-input {
@@ -17,6 +30,9 @@ code[class]{
   text-shadow: 0 0 5px rgba(0,0,0,0.5) !important;
   * {
     pointer-events: none;
+  }
+  img {
+    filter: blur(2px);
   }
   .btn {
     border: 0px solid !important;
@@ -62,6 +78,24 @@ header .container {
   background: transparent;
 }
 .page-wrapper{
+  font-family: 'Exo 2';
   background: #fff;
   font-size: 17px;
+}
+
+.level-H4 {
+  margin-left: 24px;
+}
+.cards-wrapper h5 {
+  width: 100%;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 16;
+  padding-bottom: 2px;
+}
+
+#markdown img {
+  width: 100%;
+  border: 2px solid #ccc;
+  border-radius: 6px;
 }

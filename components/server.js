@@ -106,7 +106,7 @@ const ReadyPromise = new Promise((resolve, reject) => {
 })  
 
 const start = (mongo) => {
-  const {PORT} = process.env
+  const {PORT = 6767} = process.env
   app.emit('connected', app, mongo)
   require('../services')(app, mongo)
   app.mongo = mongo;

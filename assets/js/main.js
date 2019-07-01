@@ -29,5 +29,5 @@ $(document).ready(function() {
     $('table').addClass('table table-bordered')
     setTimeout(function(){
         document.body.classList.remove('loading')
-    },500);
+    },300);
 });
