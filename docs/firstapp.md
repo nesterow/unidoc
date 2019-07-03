@@ -1,9 +1,9 @@
 ## Micro-twitter app
 
 In this section we'll develop a toy demo application to show off some of the Frontless features. 
-The purpose is to get an overview of Frontless stack.
+The purpose is to get an overview of Frontless stack (and full-stack development in general).
 
-The toy app will consist of users and their associated microposts, thus constituting a minimalist Twitter-style app.
+The micro-twitter app will consist of users and their associated microposts, thus constituting a minimalist Twitter-style app.
 
 ----------------------------
 ## Bootstraping the app
@@ -143,7 +143,7 @@ Entry point for SCSS files is `styles.scss`. Vast variety of CSS frameworks are 
 Everything is set! Let's start building the application itself.
 
 -----------------------------------------------
-## Building the app
+## Working with forms
 In this section we'll start building the application itsetlf beginning with user interface and ending with backend services.
 Let's start from the basics that are required for our application to function.
 
@@ -283,3 +283,233 @@ const Model = {
 
 export default ({data}) => validate(data, Model)
 ``` 
+
+------------------------------------------------------------------------
+##### Let's apply the validation method to our form and see how it works:
+
+```javascript
+import {serializeForm} from '@frontless/core'
+import validator from 'signup.validator'
+
+export default () => ({
+  layout: 'microapp',
+
+  state: {
+    errors:{},
+    success: false,
+  },
+
+  submit(ev) {
+    ev.preventDefault()
+    const data = serializeForm(ev.target)
+    console.log(data)
+    const errors = validator({data,})
+    console.log(errors)
+    if (errors)
+      return this.update({errors,});
+    
+  },
+
+  reset(){
+    this.update({
+      errors:{}
+    })
+  }
+})
+```
+
+--------------------------------------------------------------------
+Now let's try to send an empty form and see what would be the output.
+
+**Output:**
+![validation_1.png](/docs/firstapp/validation_1.png)
+
+##### How does the validator work?
+The [validate.js](https://validatejs.org/) takes a javascipt object and compares the values by constraints we provided in the `Model`, 
+then if the validation fails it would return an object with arrays of messages for every wrong value. If the validation passes the function would return nothing (undefined).
+In our case, if the form doesn't pass validation we update component's state with the `errors` object, then the template will generate errors for every failed field.
+
+----------------------------------------------------------------------
+## Creating services
+For a fullstack developer, implementing API is one of the most time-consuming and responsible routines. 
+In order to make this job easier, Frontless makes use of [Feathers.JS](https://feathersjs.com) which is 
+one of the best technologies in the field. 
+
+[Feathers.JS](https://feathersjs.com) is well documented and I highly recommend to get a closer look at it beyond the scope of this tutorial.
+If you never used Feathers.JS before, fear not - soon you'll realize that it is very simple and easy to use.
+
+#### Sign up API
+Create a file named `signup.js` in the `services` directory with following content:
+```javascript
+export default (app, mongo) => {
+  app.use('signup', {
+    async get(login) {
+      // handle a GET request
+    },
+    async create(ctx) {
+      // handle a POST request
+    }
+  })
+}
+```
+
+Then open `services/index.js` and import `signup.js`:
+```javascript
+import users from './users'
+import signup from './signup'
+export default function (app, mongo) {
+  users(app, mongo)
+  signup(app, mongo)
+}
+```
+We've just created the first api service. It doesn't do anything yet, but let's have a look at what we have at the time.
+We added a function that receives two arguments: First arg - `(app)` is an express.js application instance which we can use to register our services. The second one - `(mongo)` is the MongoDB connection which we'll later use to access the storage.
+Inside the factory function we registered a Feather.JS service by specifying CRUD operations that we need for the signup form to function.
+Finally, we implicitly called this function inside `index.js` in order to make the service accessible in application.
+
+#### Accessing MongoDB
+Let's create a simple MongoDB query to check out if a login already taken by another user: 
+```javascript
+const {MONGO_DATABASE} = process.env
+export default (app, mongo) => {
+  const Users = mongo.db(MONGO_DATABASE).collection('users')
+  app.use('signup', {
+    async get(username) {
+      const user = await Users.findOne({username,})
+      return {
+        exists: !!user
+      }
+    },
+    async create(ctx) {
+      // handle a POST request
+    }
+  })
+}
+```
+This code takes database name from `MONGO_DATABASE` variable, then we aquire access a collection named `users`. Finally, in the `get` method we request a user by username and return the value `exists` which converts to Boolean type.
+
+##### Calling API methods
+Now it's time to make use of the first API method. 
+In order to access services Frontless provides an universal client in scope of every Riot.JS component (this.client). 
+###### Let's add a new method named `checkUserName` into `sign-up.riot` as follows:
+```javascript
+export default () => ({
+  ...
+
+  checkUserName(ev){
+    const {value} = ev.target
+    const Users = this.client.service('signup')
+    Users.get(value).then(({exists}) => {
+      if (exists) {
+        this.update({
+          errors: {
+            login: ["This login is already taken"]
+          }
+        })
+      }
+    })
+  },
+
+  ...
+})
+```
+This method gets `value` from the login field and then makes a `get` call to the signup service.
+
+###### Now let's bind this method to `onblur` event for the login field:
+```html
+<input onfocus={reset} onblur={checkUserName} name="login" type="text" placeholder="Login" />
+```
+`onblur` event will trigger when the user switches to another fields. Better user experience would be to bind a debounced method to `keyup` handler, but we wont do this in context of this tutorial.
+
+**Sign up form so far:**
+```html
+<sing-up>
+  <div>
+    <form onsubmit={ submit }>
+      <h2>Sign Up</h2>
+      <div>
+        <input onfocus={reset} name="full_name" type="text" placeholder="Full Name">
+        <p each={error in state.errors.full_name}>{error}</p>
+      </div>
+      <div>
+        <input onfocus={reset} onblur={checkUserName} name="login" type="text" placeholder="Login">
+        <p each={error in state.errors.login}>{error}</p>
+      </div>
+      <div>
+        <input name="password" type="password" placeholder="Password">
+        <p each={error in state.errors.password}>{error}</p>
+      </div>
+      <div>
+          <button type="submit" >
+            Sign Up
+          </button>
+      </div>
+    </form>
+  </div>
+  <script>
+    export default () => ({
+      
+      layout: 'microapp',
+
+      state: {
+        errors:{},
+      },
+
+      checkUserName(ev){
+        const {value} = ev.target
+        const Users = this.client.service('signup')
+        Users.get(value).then(({exists}) => {
+          if (exists) {
+            this.update({
+              errors: {
+                login: ["This login is already taken"]
+              }
+            })
+          }
+        })
+      },
+  
+      submit(ev) {
+        ev.preventDefault()
+        // handle form submit
+      },
+
+      reset(){
+        this.update({
+          errors:{}
+        })
+      }
+    })
+  </script>
+</sign-up>
+```
+----------------------------------------------------------------------
+#### Create users
+Let's get back to the sign up service and think on how to implement user registration itself. 
+First thing to consider is _validation_ for the create method. This is actually first matter of hand you should think of when you working close to the database. 
+In the field there are several kinds of request validations that a backend developer concerned with, but for the purpose of this tutorial we'll 
+only validate correctness of user input with previously created function. 
+Second thing to consider is _data integrity_ which in this tutorial is limited to uniqness of usernames (logins). 
+
+##### Validate user requests
+We'll use previously created validator:
+```javascript
+// `services/signup.js`
+import validator from 'signup.validator'
+const {MONGO_DATABASE} = process.env
+export default (app, mongo) => {
+  const Users = mongo.db(MONGO_DATABASE).collection('users')
+  app.use('signup', {
+    async get(username) {
+      const user = await Users.findOne({username,})
+      return {
+        exists: !!user
+      }
+    },
+    async create(ctx) {
+      // handle a POST request
+    }
+  })
+}
+
+```
