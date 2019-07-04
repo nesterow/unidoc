@@ -1497,16 +1497,10 @@ code
     background: #f7f7f7;
 }
 
-code[class*='language-'],
-pre[class*='language-']
-{font-family: 'Courier New', Courier, monospace; font-size: 14px; 
+code[class*='language-']
+{font-family: 'Courier New', Courier, monospace; overflow-x: hidden; width: 100%; 
 
-    color: #565f57; text-shadow: none;
-}
-
-code[class]
-{
-    width: 100%;
+    background: #3a3a3a;
 }
 
 .top-search-box
@@ -1602,4 +1596,10 @@ header .container
 #markdown img
 {
     width: 100%; border: 2px solid #ccc; border-radius: 6px;
+}
+
+.scrolled
+{display: block; overflow-y: auto; 
+
+    max-height: 100vh;
 }

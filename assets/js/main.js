@@ -30,4 +30,30 @@ $(document).ready(function() {
     setTimeout(function(){
         document.body.classList.remove('loading')
     },300);
+    $('code').each((i, e)=>{
+        var lang = e.classList[0];
+        if (Prism.languages[lang]) {
+            e.innerHTML = Prism.highlight(e.textContent, Prism.languages[lang], lang)
+        }
+    })
+    var headers = $('h2,h4');
+    function initNavi(){
+        var nav = document.querySelector('showdown-nav');
+        var top = nav.getBoundingClientRect().top;
+        if (top === 0) {
+            if (!nav.classList['scrolled'])
+                nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+        headers.each((i, e) => {
+            if (e.getBoundingClientRect().top <= 20) {
+                $('.nav-link').removeClass('active');
+                $('a[href="#'+e.id+'"]').addClass('active');
+            }
+        })
+    }
+    initNavi();
+    $(window).on('scroll', initNavi);
+    
 });

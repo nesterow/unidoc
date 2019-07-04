@@ -28,7 +28,7 @@ By default Frontless is configured to use MongoDB, however advanced users can us
 In order to run default Frontless distribution you need a running MongoDB instance whether on localhost or remote.
 For this tutorial I recomend to use free plan on [cloud.mongodb.com](https://cloud.mongodb.com).
 
-#### DB Configuration
+##### DB Configuration
 Open `config -> environ.env` and add `MONGO_DATABASE` and `MONGODB_URI` variables for accessing your mongo instance:
 ```bash
 MONGO_DATABASE=microtw
@@ -486,16 +486,19 @@ This method gets `value` from the login field and then makes a `get` call to the
 ----------------------------------------------------------------------
 #### Create users
 Let's get back to the sign up service and think on how to implement user registration itself. 
-First thing to consider is _validation_ for the create method. This is actually first matter of hand you should think of when you working close to the database. 
+First thing to consider is _validation_ for the create method. This is actually first matter you should think of when you work close to the database. 
 In the field there are several kinds of request validations that a backend developer concerned with, but for the purpose of this tutorial we'll 
 only validate correctness of user input with previously created function. 
 Second thing to consider is _data integrity_ which in this tutorial is limited to uniqness of usernames (logins). 
 
-##### Validate user requests
-We'll use previously created validator:
+#### Set component's state
+When we make api requests which supposed to show changes in UI, the good style would be to format response the same way as the compoment's state.
+Frontless provides a simple method for that purpose - `app.setState(id, state)`. When a response composed with this method the target component (id) will automatically re-render with returned state. 
+
+**Code**
 ```javascript
-// `services/signup.js`
-import validator from 'signup.validator'
+// -> services/signup.js
+import validate from 'signup.validator'
 const {MONGO_DATABASE} = process.env
 export default (app, mongo) => {
   const Users = mongo.db(MONGO_DATABASE).collection('users')
@@ -506,10 +509,31 @@ export default (app, mongo) => {
         exists: !!user
       }
     },
-    async create(ctx) {
-      // handle a POST request
+
+    async create(formData) {
+
+      const errors = validate(formData)
+      
+      if (errors) {
+        return app.setState('signup-form', {
+          errors,
+        })
+      }
+
+      const {exists} = await this.get(formData.username)
+      if (!exists) {
+        return Model.insert(formData)
+      } else {
+        return app.setState('signup-form', {
+          errors: {
+            username: ["User already exists"]
+          }
+        });
+      }
     }
   })
 }
 
 ```
+In this example we validate form data if validation fails we send component's state with errors. Secondly, we check if the username is already taken. 
+If the username were not taken a new user is created.

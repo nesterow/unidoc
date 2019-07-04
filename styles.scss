@@ -5,15 +5,18 @@ code {
   border-radius: 6px;
   color: #e83e8c;
 }
-code[class*="language-"], 
-pre[class*="language-"] {
-  color: #565f57;
-  font-family: 'Courier New', Courier, monospace;
-  text-shadow: none;
-  font-size: 14px;
-}
-code[class]{
+// code[class*="language-"], 
+// pre[class*="language-"] {
+//   color: #565f57;
+//   font-family: 'Courier New', Courier, monospace;
+//   text-shadow: none;
+//   font-size: 14px;
+// }
+code[class*="language-"]{
+  background: #3a3a3a;
   width: 100%;
+  font-family: 'Courier New', Courier, monospace;
+  overflow-x: hidden;
 }
 
 .top-search-box {
@@ -98,4 +101,10 @@ header .container {
   width: 100%;
   border: 2px solid #ccc;
   border-radius: 6px;
+}
+
+.scrolled {
+  max-height: 100vh;
+  display: block;
+  overflow-y: auto;
 }

@@ -1,8 +1,9 @@
 //** RiotJS plugins that supposed to work the same way on client and server */
-const riot = require('riot')
+
 const client = require('client')
 const {withRouter} = require('@frontless/core/browser')
 const isBrowser = typeof window !== 'undefined'
+const riot = isBrowser ? require('riot') : require('@frontless/riot')
 const indexer = require('components/indexer')
 indexer.loadDocuments();
 
@@ -15,7 +16,10 @@ if (!isBrowser) {
     const component = tag.default;
     riot.register(component.name, component)
   };
-  glob.sync( './**/*.riot' ).forEach( ( file ) => !file.startsWith('./specs/') && register(file))
+  const test = (file) => {
+    return !file.startsWith('./specs/') && !file.startsWith('./node_modules/')
+  }
+  glob.sync( './**/*.riot' ).forEach( ( file ) => test(file) && register(file))
 }
 
 
