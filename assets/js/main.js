@@ -39,6 +39,7 @@ $(document).ready(function() {
     var headers = $('h2,h4');
     function initNavi(){
         var nav = document.querySelector('showdown-nav');
+        if (!nav) return;
         var top = nav.getBoundingClientRect().top;
         if (top === 0) {
             if (!nav.classList['scrolled'])
@@ -55,5 +56,11 @@ $(document).ready(function() {
     }
     initNavi();
     $(window).on('scroll', initNavi);
+
+    $('a').on('click', function(){
+        if (this.getAttribute('href').indexOf('#') !== 0 && this.getAttribute('target') !== '_blank') {
+            document.body.classList.add('loading')
+        }
+    })
     
 });

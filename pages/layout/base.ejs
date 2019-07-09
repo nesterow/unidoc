@@ -16,7 +16,7 @@
     <!-- Theme CSS -->
     <link rel="stylesheet" href="assets/plugins/prism/prism.css">
     <script type="text/javascript" src="/assets/plugins/prism/prism.js"></script> 
-    <link rel="stylesheet" href="assets/plugins/lightbox/dist/ekko-lightbox.css">
+    <link rel="stylesheet" href="assets/plugins/lightbox/build/ekko-lightbox.css">
     <link id="theme-style" rel="stylesheet" href="assets/css/styles.min.css">
     <link rel="stylesheet" href="/assets/css/styles.min.css">
     <% if (CACHE_PAGES.filter((e) => e.endsWith(req.params [0] || '')).length) { %> 
@@ -25,13 +25,14 @@
     <% if (IS_PWA) {%>
       <script src="/assets/boot.js"></script>
     <% } %>
-    <script src="/assets/application.js"></script>
     <!-- Main Javascript -->          
     <script type="text/javascript" src="/assets/plugins/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="/assets/plugins/bootstrap/js/bootstrap.min.js"></script>  
     <script type="text/javascript" src="/assets/plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>  
-    <script type="text/javascript" src="/assets/plugins/lightbox/dist/ekko-lightbox.min.js"></script>       
-    <script type="text/javascript" src="/assets/plugins/stickyfill/dist/stickyfill.min.js"></script> 
+    <script type="text/javascript" src="/assets/plugins/lightbox/build/ekko-lightbox.min.js"></script>       
+    <script type="text/javascript" src="/assets/plugins/stickyfill/build/stickyfill.min.js"></script> 
+    <script src="/assets/application.js"></script>
+    
     <%- head %>
     <title><%- page.title %></title>
   </head>
