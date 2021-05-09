@@ -39,7 +39,7 @@
     "feathers-mongodb": "^4.0.4",
     "gulp": "^4.0.2",
     "jsdom": "15.1.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "mongodb": "^3.2.7",
     "remove-markdown": "^0.3.0",
     "require-globify": "^1.4.1",
