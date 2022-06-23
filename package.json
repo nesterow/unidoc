@@ -38,7 +38,7 @@
     "express-session": "^1.16.2",
     "feathers-mongodb": "^4.0.4",
     "gulp": "^4.0.2",
-    "jsdom": "15.1.1",
+    "jsdom": "16.5.0",
     "lodash": "^4.17.11",
     "mongodb": "^3.2.7",
     "remove-markdown": "^0.3.0",
